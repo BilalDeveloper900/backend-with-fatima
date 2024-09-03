@@ -6,6 +6,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var categoryRouter = require('./routes/category');
 var subCategoryRouter=require('./routes/subCategory');
+var productRouter=require('./routes/products')
 
 var app = express();
 
@@ -17,6 +18,7 @@ app.use('/', indexRouter);
 app.use('/api/v1/auth', usersRouter);
 app.use('/api/v1/category', categoryRouter);
 app.use('/api/v1/subCategory', subCategoryRouter);
+app.use('/api/v1/product',productRouter);
 
 mongoose.connect('mongodb://localhost:27017/Dashboard')
   .then(() => console.log('Connected to MongoDB successfully!'))
