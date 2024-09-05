@@ -60,7 +60,7 @@ exports.createUser = async (req, res) => {
 
         await sendOTPEmail(email, otp);
 
-        res.status(201).json({ message: 'User created successfully', user: newUser });
+        res.status(201).json({ message: 'User created successfully. Please verify your OTP.', user: newUser });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
