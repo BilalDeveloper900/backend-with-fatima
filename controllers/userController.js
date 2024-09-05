@@ -1,6 +1,30 @@
-const jwt = require('jsonwebtoken'); 
+const jwt = require('jsonwebtoken');
 const User = require('../models/userSchema');
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
+const UserOTPVerification = require('../models/userOTPVerification');
+
+const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
+
+const sendOTPEmail = async (email, otp) => {
+    const transporter = nodemailer.createTransport({
+        host: 'smtp.ethereal.email',
+        port: 587,
+        auth: {
+            user: 'alexie26@ethereal.email',
+            pass: 'jsHH2GKaad3ayZYvwK'
+        }
+    });
+
+    const mailOptions = {
+        from: 'Bilal@gmail.com',
+        to: email,
+        subject: 'Verify Your Account',
+        text: `Your OTP is ${otp}. It will expire in 5 minutes.`,
+    };
+
+    await transporter.sendMail(mailOptions);
+}
 
 exports.createUser = async (req, res) => {
     try {
@@ -22,6 +46,20 @@ exports.createUser = async (req, res) => {
         });
 
         await newUser.save();
+
+        const otp = generateOTP();
+
+        const otpVerification = new UserOTPVerification({
+            userId: newUser._id,
+            otp: otp,
+            createdAt: new Date(),
+            expiresAt: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes from now
+        });
+
+        await otpVerification.save();
+
+        await sendOTPEmail(email, otp);
+
         res.status(201).json({ message: 'User created successfully', user: newUser });
     } catch (error) {
         res.status(500).json({ error: error.message });
