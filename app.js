@@ -1,18 +1,31 @@
 var express = require('express');
 var cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+require('./helpers/googleAuth');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var categoryRouter = require('./routes/category');
 var subCategoryRouter=require('./routes/subCategory');
-var productRouter=require('./routes/products')
+var productRouter=require('./routes/products');
+const session = require('express-session');
+const passport = require('passport');
 
 var app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'mySecret',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: process.env.NODE_ENV === 'production' } 
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', indexRouter);
 app.use('/api/v1/auth', usersRouter);

@@ -92,3 +92,71 @@ exports.loginUser = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+const sendResetEmail = async (email, resetURL) => {
+    const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        auth: {
+            user: 'bilal.dev900@gmail.com',
+            pass: 'usntdkavibxpzpin'
+        }
+    });
+
+    const mailOptions = {
+        from: 'bilal@gmail.com',
+        to: email,
+        subject: 'Password Reset Request',
+        text: `You have requested to reset your password. Click the link to reset: ${resetURL}. This link will expire in 1 hour.`,
+    };
+
+    await transporter.sendMail(mailOptions);
+}
+
+exports.forgetPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const resetToken = jwt.sign(
+            { userId: user._id },
+            'my_secret',
+            { expiresIn: '1h' }
+        );
+
+        const resetURL = `http://localhost:5000/api/v1/reset-password/${resetToken}`;
+
+        await sendResetEmail(user.email, resetURL);
+
+        res.status(200).json({ message: 'Password reset link has been sent to your email.' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+exports.resetPassword = async (req, res) => {
+    try {
+        const { token } = req.query;
+        const { newPassword } = req.body;
+
+        const decoded = jwt.verify(token, 'my_secret');
+
+        const user = await User.findById(decoded.userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+
+        await user.save();
+
+        res.status(200).json({ message: 'Password has been reset successfully.' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
