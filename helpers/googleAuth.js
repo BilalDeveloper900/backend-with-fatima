@@ -1,16 +1,10 @@
 const mongoose = require('mongoose');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const User = require('../models/userSchema');
 require('dotenv').config();
 
-const authUserSchema = new mongoose.Schema({
-  googleId: { type: String, required: true, unique: true },
-  name: { type: String },
-  email: { type: String, unique: true },
-  profilePhoto: { type: String },
-});
-
-const User = mongoose.model('authUser', authUserSchema);
+const User = mongoose.model('authUser', User);
 
 passport.serializeUser((user, done) => {
   done(null, user.id);

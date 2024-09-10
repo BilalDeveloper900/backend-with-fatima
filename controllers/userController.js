@@ -3,6 +3,7 @@ const User = require('../models/userSchema');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const UserOTPVerification = require('../models/userOTPVerification');
+const {httpsCodes} = require('../constant/httpcode')
 
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
@@ -60,7 +61,7 @@ exports.createUser = async (req, res) => {
 
         await sendOTPEmail(email, otp);
 
-        res.status(201).json({ message: 'User created successfully. Please verify your OTP.', user: newUser });
+        res.status(httpsCodes.CREATED).json({ message: 'User created successfully. Please verify your OTP.', user: newUser });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
