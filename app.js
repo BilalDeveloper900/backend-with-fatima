@@ -33,6 +33,8 @@ app.use('/api/v1/category', categoryRouter);
 app.use('/api/v1/subCategory', subCategoryRouter);
 app.use('/api/v1/product',productRouter);
 
+app.use('/api/v2/auth' , require('./controllers/jobControler'))
+
 mongoose.connect('mongodb://localhost:27017/Dashboard')
   .then(() => console.log('Connected to MongoDB successfully!'))
   .catch((error) => {

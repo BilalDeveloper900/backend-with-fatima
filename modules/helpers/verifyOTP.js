@@ -1,5 +1,4 @@
-const UserOTPVerification = require("../models/userOTPVerification");
-
+const UserOTPVerification = require("../../models/userOTPVerification");
 
 exports.verifyOTP = async (req, res) => {
     try {
