@@ -54,7 +54,7 @@ exports.createUser = async (req, res) => {
             userId: newUser._id,
             otp: otp,
             createdAt: new Date(),
-            expiresAt: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes from now
+            expiresAt: new Date(Date.now() + 5 * 60 * 1000), 
         });
 
         await otpVerification.save();

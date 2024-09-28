@@ -1,7 +1,7 @@
 var express = require('express');
 var cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
-require('./helpers/googleAuth');
+require('./modules/helpers/googleAuth');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -33,7 +33,7 @@ app.use('/api/v1/category', categoryRouter);
 app.use('/api/v1/subCategory', subCategoryRouter);
 app.use('/api/v1/product',productRouter);
 
-app.use('/api/v2/auth' , require('./controllers/jobControler'))
+app.use('/api/v2/auth' , require('./controllers/jobControler'));
 
 mongoose.connect('mongodb://localhost:27017/Dashboard')
   .then(() => console.log('Connected to MongoDB successfully!'))

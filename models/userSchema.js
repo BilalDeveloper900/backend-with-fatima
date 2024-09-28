@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
     role: { type: String, enum: ['admin', 'user'], default: 'user' },
     googleId: { type: String, required: true, unique: true },
     profilePhoto: { type: String },
+    otp: { type: String }
 
 }, { timestamps: true });
 

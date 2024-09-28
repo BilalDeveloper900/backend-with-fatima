@@ -2,9 +2,11 @@
 const router = require("express")();
 const { httpsCodes } = require("../constant/httpcode");
 const UserManager = require("../manager/userManeger");
-// Create a job
+
 router.post("/", async (req, res, next) => {
-    const reqObj = Object.assign({}, req.body);
+
+    const reqObj =  req.body;
+
     UserManager.createUser(reqObj)
         .then(async (result) => {
             res.status(result.status).json(result);

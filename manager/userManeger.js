@@ -1,5 +1,5 @@
 "use strict";
-const { httpsCodes } = require("../constant/language");
+const { httpsCodes } = require("../constant/httpcode");
 const User = require("../models/userSchema");
 const { language } = require("../constant/language");
 const { sendOTPEmail } = require('../modules/helper')

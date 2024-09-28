@@ -1,6 +1,6 @@
 var express = require('express');
 const { createUser, loginUser, resetPassword, forgetPassword  } = require('../controllers/userController');
-const { verifyOTP } = require('../helpers/verifyOTP');
+const { verifyOTP } = require('../modules/helpers/verifyOTP');
 var router = express.Router();
 
 router.post('/register', createUser);
